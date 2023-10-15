@@ -1,0 +1,40 @@
+.gradiente {
+    background-image: linear-gradient(to right, #F73B0D , #ff9900);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.button-gradiente {
+    background-image: linear-gradient(to right, #F73B0D , #ff9900);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button-gradiente:hover {
+    background-image: none;
+    background-color: #F7860D;
+    color: black;
+}
+/* Estilo para campos de entrada */
+.input-gradiente {
+
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Estilo para campos de entrada en hover (cuando el mouse pasa por encima) */
+.input-gradiente:hover {
+    background-image: none;
+    border-color: #ff9900; /* Cambia el color del borde en hover */
+}
+
+/* Estilo para campos de entrada en foco (cuando se selecciona) */
+.input-gradiente:focus {
+    border-color: #ff9900; /* Cambia el color del borde cuando se selecciona */
+    outline: none; /* Elimina el contorno predeterminado del navegador */
+}
