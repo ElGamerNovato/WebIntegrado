@@ -426,7 +426,7 @@
                             <div class="container overflow-hidden rounded-2xl">
                                 <div class="row align-items-center">
                                     <div class="col-12 col-md-6 col-lg-4">
-                                        <h5 class="fw-bold text-black">Programar Rutas</h5>
+                                        <h5 class="fw-bold text-black" style="margin-top: 20px">Programar Rutas</h5>
                                         <div class="d-flex align-items-center">
                                             <div class="avatar avatar-md me-2 bg-yellow-400 border border-4 border-blue-600 rounded-full"></div>
                                             <div class="d-flex flex-column">
@@ -499,8 +499,8 @@
                                                     </td>
                                                     <td>
                                                         <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-primary btn-sm">Modificar Ruta</button>
-                                                            <button class="btn btn-danger btn-sm">Eliminar Ruta</button>
+                                                            <button class="design-new">Modificar Ruta</button>
+                                                            <button class="design-new">Eliminar Ruta</button>
                                                         </div>
                                                     </td>
                                                     <td>
