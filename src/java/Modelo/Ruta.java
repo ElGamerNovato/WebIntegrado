@@ -15,6 +15,8 @@ public class Ruta {
     private int distanciaRecorrido;
     private int tiempoRecorrido;
     private String observacionRuta;
+    private int idHorario;
+    private String turno;
     private boolean activo;
     public Ruta(){}
 
@@ -66,6 +68,22 @@ public class Ruta {
         this.observacionRuta = observacionesRuta;
     }
 
+    public String getTurno() {
+        return turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
+
+    public int getIdHorario() {
+        return idHorario;
+    }
+
+    public void setIdHorario(int idHorario) {
+        this.idHorario = idHorario;
+    }
+    
     public boolean isActivo() {
         return activo;
     }

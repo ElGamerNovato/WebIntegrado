@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 15, 2023 at 07:42 PM
+-- Generation Time: Oct 16, 2023 at 05:09 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -304,6 +304,7 @@ CREATE TABLE `pasajero` (
 
 CREATE TABLE `ruta` (
   `idRuta` int(11) NOT NULL,
+  `IdHorario` int(11) NOT NULL,
   `nombreRuta` varchar(45) NOT NULL,
   `descripcionRuta` varchar(45) DEFAULT NULL,
   `distanciaRecorrido` int(11) NOT NULL,
@@ -316,48 +317,19 @@ CREATE TABLE `ruta` (
 -- Dumping data for table `ruta`
 --
 
-INSERT INTO `ruta` (`idRuta`, `nombreRuta`, `descripcionRuta`, `distanciaRecorrido`, `tiempoRecorrido`, `observacionRuta`, `activo`) VALUES
-(1, 'Ruta A', 'Carretera asfaltada ', 400, 10, 'Ruta fluida sin peajes', b'1'),
-(2, 'Ruta B', 'Carretera asfaltada ', 300, 8, 'Ruta con 3 peajes', b'1'),
-(3, 'Ruta C', 'Carretera con trocha ', 550, 12, 'Ruta sin peajes', b'1'),
-(4, 'Ruta D', 'Carretera asfaltada ', 800, 12, 'Carretera con 2 controles policiales', b'1'),
-(5, 'Ruta E', 'Carretera con trocha ', 120, 5, 'Carretera libre de peajes', b'1'),
-(6, 'Ruta F', 'Carretera asfaltada ', 900, 15, 'Carretera libre de controles policiales', b'1'),
-(7, 'Ruta G', 'Carretera con trocha ', 600, 12, 'Carretera con 4 peajes', b'1'),
-(8, 'Ruta H', 'Carretera asfaltada ', 300, 12, 'Carreter de subida si peajes', b'1'),
-(9, 'Ruta I', 'Carretera con trocha ', 120, 5, 'Carretera de altura ', b'1'),
-(10, 'Ruta J', 'Carretera pistera', 150, 6, 'Carretera sin contratiempos', b'1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ruta_horario`
---
-
-CREATE TABLE `ruta_horario` (
-  `idRuta_Horario` int(11) NOT NULL,
-  `idRuta` int(11) NOT NULL,
-  `idHorario` int(11) NOT NULL,
-  `estado` bit(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `ruta_horario`
---
-
-INSERT INTO `ruta_horario` (`idRuta_Horario`, `idRuta`, `idHorario`, `estado`) VALUES
-(1, 1, 1, b'1'),
-(2, 1, 2, b'1'),
-(3, 1, 3, b'1'),
-(4, 2, 1, b'1'),
-(5, 2, 2, b'1'),
-(6, 2, 3, b'1'),
-(7, 3, 1, b'1'),
-(8, 3, 2, b'1'),
-(9, 3, 3, b'1'),
-(10, 4, 1, b'1'),
-(11, 4, 2, b'1'),
-(12, 4, 3, b'1');
+INSERT INTO `ruta` (`idRuta`, `IdHorario`, `nombreRuta`, `descripcionRuta`, `distanciaRecorrido`, `tiempoRecorrido`, `observacionRuta`, `activo`) VALUES
+(1, 3, 'Ruta A', 'Carretera asfaltada ', 400, 10, 'Sin peajes', b'0'),
+(2, 3, 'Ruta B', 'Carretera asfaltada ', 300, 8, 'Con 3 peajes', b'1'),
+(3, 1, 'Ruta C', 'Carretera con trocha ', 550, 12, 'Sin peajes', b'1'),
+(4, 2, 'Ruta D', 'Carretera asfaltada ', 800, 12, 'Con control policial', b'1'),
+(5, 1, 'Ruta E', 'Carretera con trocha ', 120, 5, 'Sin peajes', b'1'),
+(6, 3, 'Ruta F', 'Carretera asfaltada ', 900, 15, 'Sin Control policial', b'0'),
+(7, 3, 'Ruta HJ', 'Carretera asfaltada', 100, 90, 'Carr. Alta', b'1'),
+(8, 1, 'Ruta Q', 'Carretera con trochas', 500, 120, 'Sin peaje', b'0'),
+(9, 2, 'Ruta W', 'Carretera con trochas', 1000, 120, 'Carr. Plana', b'0'),
+(10, 2, 'Ruta J', 'Carretera pistera', 150, 6, 'Carr. Libre', b'0'),
+(11, 1, 'Ruta JK', 'Carretera asfaltada', 300, 150, 'Con peaje', b'0'),
+(12, 1, 'Ruta JE', 'Carretera con trocha', 1000, 120, 'Con peaje', b'0');
 
 -- --------------------------------------------------------
 
@@ -452,15 +424,8 @@ ALTER TABLE `pasajero`
 -- Indexes for table `ruta`
 --
 ALTER TABLE `ruta`
-  ADD PRIMARY KEY (`idRuta`);
-
---
--- Indexes for table `ruta_horario`
---
-ALTER TABLE `ruta_horario`
-  ADD PRIMARY KEY (`idRuta_Horario`),
-  ADD KEY `fk_ruta_horario_idx` (`idRuta`),
-  ADD KEY `fk_horario_ruta_idx` (`idHorario`);
+  ADD PRIMARY KEY (`idRuta`),
+  ADD KEY `IdHorario` (`IdHorario`);
 
 --
 -- Indexes for table `usuario`
@@ -520,13 +485,7 @@ ALTER TABLE `pasajero`
 -- AUTO_INCREMENT for table `ruta`
 --
 ALTER TABLE `ruta`
-  MODIFY `idRuta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `ruta_horario`
---
-ALTER TABLE `ruta_horario`
-  MODIFY `idRuta_Horario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idRuta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `usuario`
@@ -560,11 +519,10 @@ ALTER TABLE `detalle_viaje_boleto`
   ADD CONSTRAINT `fk_viaje_detalleViaje` FOREIGN KEY (`idViaje`) REFERENCES `viaje` (`idViaje`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `ruta_horario`
+-- Constraints for table `ruta`
 --
-ALTER TABLE `ruta_horario`
-  ADD CONSTRAINT `fk_horario_ruta` FOREIGN KEY (`idHorario`) REFERENCES `horario` (`idHorario`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_ruta_horario` FOREIGN KEY (`idRuta`) REFERENCES `ruta` (`idRuta`) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE `ruta`
+  ADD CONSTRAINT `Idhorario` FOREIGN KEY (`IdHorario`) REFERENCES `horario` (`idHorario`);
 
 --
 -- Constraints for table `viaje`

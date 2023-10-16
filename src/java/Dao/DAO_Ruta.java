@@ -1,5 +1,6 @@
 package Dao;
 
+import Modelo.Horario;
 import Modelo.Ruta;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,11 @@ public class DAO_Ruta extends Conexion {
 
     public List<Ruta> ListarRutas() {
         List<Ruta> rutas = new ArrayList<>();
-        String requestSql = "SELECT * FROM ruta WHERE activo = 1";
+        String requestSql = "SELECT rt.idRuta, hr.turno, rt.nombreRuta, rt.descripcionRuta, rt.distanciaRecorrido, rt.tiempoRecorrido, rt.observacionRuta, rt.activo "
+                + "FROM ruta rt "
+                + "INNER JOIN horario hr ON hr.idHorario = rt.IdHorario "
+                + "WHERE rt.activo = 1 "
+                + "ORDER BY rt.idRuta";
 
         try {
             pst = cn.prepareStatement(requestSql);
@@ -20,6 +25,7 @@ public class DAO_Ruta extends Conexion {
             while (rs.next()) {
                 Ruta rt = new Ruta();
                 rt.setIdRuta(rs.getInt("idRuta"));
+                rt.setTurno(rs.getString("turno"));
                 rt.setNombreRuta(rs.getString("nombreRuta"));
                 rt.setDescripcionRuta(rs.getString("descripcionRuta"));
                 rt.setDistanciaRecorrido(rs.getInt("distanciaRecorrido"));
@@ -35,9 +41,9 @@ public class DAO_Ruta extends Conexion {
         return rutas;
     }
 
-    public Ruta ObtenerRuta(int id) {
-        String sqlconsulta = "SELECT * FROM Ruta WHERE idRuta=?";
-        
+    public Ruta ObtenerRuta() {
+        String sqlconsulta = "SELECT * FROM ruta WHERE idRuta=?";
+
         Ruta rt = new Ruta();
 
         try {
@@ -59,56 +65,100 @@ public class DAO_Ruta extends Conexion {
         return rt;
     }
 
-    public boolean AgregarRuta(Ruta rt) {
-        String sqlinsert = "INSERT INTO Ruta (nombreRuta, descripcionRuta, distanciaRecorrido, tiempoRecorrido, observacionRuta, activo) VALUES (?,?,?,?,?,?,1)";
+    public Ruta AgregarRuta(Ruta rt) {
+        String sqlinsert = "INSERT INTO ruta (idHorario,nombreRuta, descripcionRuta, distanciaRecorrido,"
+                + " tiempoRecorrido, observacionRuta, activo) VALUES (?,?,?,?,?,?,?)";
 
         try {
-            cn = conexion.getConnection();
-            ps = cn.prepareStatement(sqlinsert);
-            ps.setString(1, rt.getNombreRuta());
-            ps.setString(2, rt.getDescripcionRuta());
-            ps.setInt(3, rt.getDistanciaRecorrido());
-            ps.setInt(4, rt.getTiempoRecorrido());
-            ps.setString(5, rt.getObservacionRuta());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al insertar la ruta: " + ex);
+            pst = cn.prepareStatement(sqlinsert);
+
+            pst.setInt(1, rt.getIdHorario());
+            pst.setString(2, rt.getNombreRuta());
+            pst.setString(3, rt.getDescripcionRuta());
+            pst.setInt(4, rt.getDistanciaRecorrido());
+            pst.setInt(5, rt.getTiempoRecorrido());
+            pst.setString(6, rt.getObservacionRuta());
+            pst.setBoolean(7, rt.isActivo());
+
+            int rowsInserted = pst.executeUpdate();
+
+            if (rowsInserted > 0) {
+                // La inserción fue exitosa, puedes devolver el objeto chf actualizado si es necesario
+                return rt;
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error al agregar\n" + ex);
         }
-        return true;
+        return null;
     }
 
-    public boolean EditarRuta(Ruta rt) {
-        String sqlupdate = "UPDATE Ruta SET nombreRuta=?, descripcionRuta=?, distanciaRecorrido=?, tiempoRecorrido=?, observacionRuta=?, activo=? WHERE idRuta=?";
+    public Ruta EditarRuta(Ruta rt) {
+        String sqlupdate = "UPDATE ruta SET nombreRuta=?, IdHorario=?, descripcionRuta=?, distanciaRecorrido=?, "
+                + "tiempoRecorrido=?, observacionRuta=?, activo=? WHERE idRuta=?";
 
         try {
-            cn = conexion.getConnection();
-            ps = cn.prepareStatement(sqlupdate);
-            ps.setString(1, rt.getNombreRuta());
-            ps.setString(2, rt.getDescripcionRuta());
-            ps.setInt(3, rt.getDistanciaRecorrido());
-            ps.setInt(4, rt.getTiempoRecorrido());
-            ps.setString(5, rt.getObservacionRuta());
-            ps.setBoolean(6, rt.isActivo());
-            ps.setInt(7, rt.getIdRuta());
-            ps.executeUpdate();
+            pst = cn.prepareStatement(sqlupdate);
+
+            pst.setString(1, rt.getNombreRuta());
+            pst.setInt(2, rt.getIdHorario());
+            pst.setString(3, rt.getDescripcionRuta());
+            pst.setInt(4, rt.getDistanciaRecorrido());
+            pst.setInt(5, rt.getTiempoRecorrido());
+            pst.setString(6, rt.getObservacionRuta());
+            pst.setBoolean(7, rt.isActivo());
+            pst.setInt(8, rt.getIdRuta());
+
+            pst.executeUpdate();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar la ruta: " + ex);
+            System.out.println("Error al agregar\n" + ex);
         }
-        return true;
+        return rt;
     }
 
-    public boolean EliminarRuta(int id) {
-        String sqleliminar = "UPDATE Ruta SET activo = 0 WHERE idRuta=?";
+    public List<Horario> obtenerHorarios() {
+        List<Horario> horarios = new ArrayList<>();
+        String sql = "SELECT idHorario, turno FROM horario"; // Tu consulta SQL
 
         try {
-            cn = conexion.getConnection();
-            ps = cn.prepareStatement(sqleliminar);
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            pst = cn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int idHorario = rs.getInt("idHorario");
+                String turno = rs.getString("turno");
+
+                Horario horario = new Horario();
+                horario.setIdHorario(idHorario);
+                horario.setTurno(turno);
+
+                // Agrega la instancia de Horario a la lista
+                horarios.add(horario);
+            }
+
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar la ruta: " + ex);
+            // Manejo de errores
         }
-        return true;
+
+        return horarios;
+    }
+
+    public boolean EliminarRuta(int id, boolean statu) {
+        String sqleliminar = "UPDATE ruta SET activo = ? WHERE idRuta=?";
+
+        try {
+            pst = cn.prepareStatement(sqleliminar);
+            pst.setBoolean(1, statu);
+            pst.setInt(2, id);
+
+            int rowsUpdated = pst.executeUpdate();
+
+            return rowsUpdated > 0;
+
+        } catch (Exception ex) {
+            System.out.println("Error al agregar\n" + ex);
+        }
+        return false;
     }
 
 }

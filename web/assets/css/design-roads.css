@@ -1,6 +1,4 @@
 .design-new {
-    font-size: 20px;
-    font-weight: normal;
     padding: 10px;
     text-align: center;
     margin: 10px;
@@ -10,9 +8,14 @@
     border: none;
     border-radius: 20px;
     color: #00a037;
+    transition: all 0.3s;
     box-shadow: 10px 10px 10px -1px rgba(10,99,169,0.16),
         -10px -10px 10px -1px rgba(255,255,255,0.70);
 }
 
+.design-new:hover {
+    box-shadow: inset 10px 10px 10px -1px rgba(10,99,169,0.16),
+        inset -10px -10px 10px -1px rgba(255,255,255,0.70);
+}
 
 

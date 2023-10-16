@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.List" %>
 <%@ page import="Dao.DAO_Chofer" %>
+<%@ page import="Modelo.Ruta" %>
+<%@ page import="Modelo.Horario" %>
+<%@ page import="Dao.DAO_Ruta" %>
 <%@ page import="Modelo.Chauffeur" %>
 <%@ page import="Dao.DAO_Buses" %>
 <%@ page import="Modelo.Bus" %>
@@ -257,6 +260,7 @@
                                     </li>
                                 </ul>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -428,165 +432,136 @@
                                     <div class="col-12 col-md-6 col-lg-4">
                                         <h5 class="fw-bold text-black" style="margin-top: 20px">Programar Rutas</h5>
                                         <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-2 bg-yellow-400 border border-4 border-blue-600 rounded-full"></div>
-                                            <div class="d-flex flex-column">
-                                                <span class="fw-bold text-sm text-black">Dr. Nishant Kamat</span>
-                                                <span class="fw-bold text-xs text-muted">Kids Care Clinic</span>
+                                            <div class="avatar avatar-md me-2 bg-yellow-400 border border-4 border-blue-600 rounded-full">
+                                                <img src="/AvanceProject-1/assets/img/tiempo.png" alt="image" class="w-60 h-60 rounded-full">
                                             </div>
-                                            <i class="fas fa-caret-down text-blue-3 ms-2" style="font-size: 1rem;"></i>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-bold text-sm text-black">Horarios</span>
+                                                <span class="fw-bold text-xs text-muted"></span>
+                                            </div>
+                                            <li class="nav-item dropdown pe-2 d-flex align-items-center">
+                                                <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-caret-down text-blue-3 ms-2"></i>
+                                                </a>
+                                                <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+                                                    <%
+                                                    DAO_Ruta daortz = new DAO_Ruta();
+                                                    List<Horario> hrs = daortz.obtenerHorarios(); 
+
+                                                    for (Horario horario : hrs) {
+                                                        String imagen = ""; // Variable para almacenar la ruta de la imagen
+                                                        String turno = horario.getTurno(); // Supongamos que tienes un método getTurno en tu clase Horario
+        
+                                                        if ("Mañana".equalsIgnoreCase(turno)) {
+                                                            imagen = "/AvanceProject-1/assets/img/sol.png"; // Ruta de la imagen de la mañana
+                                                        } else if ("Tarde".equalsIgnoreCase(turno)) {
+                                                            imagen = "/AvanceProject-1/assets/img/tarde.png"; // Ruta de la imagen de la tarde
+                                                        } else if ("Noche".equalsIgnoreCase(turno)) {
+                                                            imagen = "/AvanceProject-1/assets/img/luna.png"; // Ruta de la imagen de la noche
+                                                        }
+                                                    %>
+                                                    <li class="mb-2">
+                                                        <a class="dropdown-item border-radius-md" href="#">
+                                                            <div class="d-flex py-1">
+                                                                <div class="my-auto">
+                                                                    <img src="<%= imagen %>" class="avatar avatar-sm me-3">
+                                                                </div>
+                                                                <div class="d-flex flex-column justify-content-center">
+                                                                    <h6 class="text-sm font-weight-normal mb-1">
+                                                                        <span class="font-weight-bold"><%= turno %></span>
+                                                                    </h6>
+                                                                    <p class="text-xs text-secondary mb-0 ">
+                                                                        <i class="fa fa-clock me-1"></i>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <%
+                                                    }
+                                                    %>
+                                                </ul>
+                                            </li>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-md me-2 bg-blue-2 rounded-full">
-                                                <i class="fas fa-calendar-alt text-blue-1" style="font-size: 1.5rem;"></i>
-                                            </div>
-                                            <div class="d-flex flex-column">
-                                                <span class="fw-bold text-sm text-black">Today</span>
-                                                <span class="fw-bold text-sm text-blue-1">2 AUG 2018</span>
-                                            </div>
-                                            <i class="fas fa-caret-down text-blue-3 ms-2" style="font-size: 1rem;"></i>
-                                        </div>
+                                        <!-- Empty -->
                                     </div>
                                     <div class="col-12 col-lg-4 mt-4">
-                                        <button class="btn btn-primary d-block w-100 fw-bold text-md rounded-3xl">Ingresar Ruta</button>
+                                        <button class="btn btn-primary d-block w-100 fw-bold text-md rounded-3xl" data-toggle="modal" data-target="#insertRoadModal">Ingresar Ruta</button>
                                     </div>
                                 </div>
                                 <div class="card-body px-0 pt-0 pb-2">
                                     <div class="table-responsive p-0">
-                                        <table class="table table-striped mb-0">
+                                        <table class="table align-items-center justify-content-center mb-0">
                                             <thead>
                                                 <tr>
                                                     <th></th>
                                                     <th></th>
                                                     <th class="text-left text-xs app-color-black pb-3 pb-md-5">RUTA</th>
-                                                    <th class="text-left text-xs app-color-black pb-3 pb-md-5">DESCRIPCION</th>
+                                                    <th class="text-left text-xs app-color-black pb-3 pb-md-5">OBSERVACION</th>
                                                     <th class="text-left text-xs app-color-black pb-3 pb-md-5">DISTANCIA RECORRIDA</th>
                                                     <th class="text-left text-xs app-color-black pb-3 pb-md-5">TIEMPO RECORRIDO</th>
-                                                    <th class="text-left text-xs app-color-black pb-3 pb-md-5">OBSERVACIONES</th>
                                                     <th class="text-left text-xs app-color-black pb-3 pb-md-5">ESTADO</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <%
+                                                DAO_Ruta daoruta = new DAO_Ruta();
+                                                List<Ruta> rutas = daoruta.ListarRutas();
+                
+                                                for (Ruta ruta : rutas) {
+                                                %>
                                                 <tr class="app-border-1">
                                                     <td>
-                                                        <i class="fas fa-circle text-blue-300 ml-3"></i>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center align-items-center rounded-md w-8 h-8 app-bg-yellow-2 app-color-yellow-1 text-lg font-semibold">1</div>
+                                                        <div class="d-flex justify-content-center align-items-center rounded-md w-8 h-8 app-bg-yellow-2 app-color-yellow-1 text-lg font-semibold">
+                                                            <%= ruta.getIdRuta() %>
+                                                        </div>
                                                     </td>
                                                     <td>
                                                         <div class="d-flex flex-row py-3">
-                                                            <div class="mr-5 w-10 h-10 bg-gray-100 rounded-full"></div>
+                                                            <div class="avatar avatar-md me-2 bg-yellow-400 border border-4 border-blue-600 rounded-full">
+                                                                <img src="/AvanceProject-1/assets/img/ruta.png" alt="image" class="w-60 h-60 rounded-full">
+                                                            </div>
                                                             <div class="d-flex flex-column">
-                                                                <span class="font-semibold text-sm app-color-black">Varun Bose</span>
-                                                                <span class="font-semibold text-xs app-color-gray-1">Male, 32 yr</span>
+                                                                <span class="font-semibold text-sm app-color-black"><%= ruta.getNombreRuta() %></span>
+                                                                <p class="text-xs text-secondary mb-0">Turno <%= ruta.getTurno() %></p>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">9999999999</span>
+                                                        <span class="font-semibold text-sm app-color-gray-1"><%= ruta.getTiempoRecorrido() %> min</span>
                                                     </td>
                                                     <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">05:10PM</span>
+                                                        <span class="font-semibold text-sm app-color-gray-1"><%= ruta.getDescripcionRuta() %></span>
+                                                        <p class="font-semibold text-xs text-secondary mb-0"><%= ruta.getObservacionRuta()  %></p>
                                                     </td>
                                                     <td>
                                                         <div class="app-bg-red-2 h-8 w-28 font-semibold text-sm d-flex justify-content-center align-items-center app-color-red-1 rounded-md">
-                                                            56 Mins
+                                                            <%= ruta.getDistanciaRecorrido() %> km
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div class="d-flex justify-content-center">
-                                                            <button class="design-new">Modificar Ruta</button>
-                                                            <button class="design-new">Eliminar Ruta</button>
+                                                            <button class="font-semibold text-sm design-new edit-road" 
+                                                                    data-ruta-id="<%= ruta.getIdRuta() %>" data-toggle="modal" data-target="#modifyRoadModal" >Modificar Ruta</button>
+                                                            <a href="/AvanceProject-1/SV_Ruta?accion=updateStatuRoad&rutaId=<%= ruta.getIdRuta() %>" 
+                                                               class="font-semibold text-sm design-new" style="color: red;">Eliminar Ruta</a>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <i class="fas fa-check-circle text-blue-300"></i>
                                                     </td>
                                                 </tr>
-                                                <tr class="app-border-1">
-                                                    <td>
-                                                        <i class="fas fa-circle text-blue-300 ml-3"></i>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center align-items-center rounded-md w-8 h-8 app-bg-blue-2 app-color-blue-1 text-lg font-semibold">2</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex flex-row align-items-center py-3">
-                                                            <div class="w-10 h-10 bg-yellow-50 rounded-full mr-5"></div>
-                                                            <div class="d-flex flex-column">
-                                                                <span class="font-semibold text-sm app-color-black">Sufia</span>
-                                                                <span class="font-semibold text-xs app-color-gray-1">Female, 28 yr</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">9999999999</span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">05:10PM</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="app-bg-red-2 h-8 w-28 font-semibold text-sm d-flex justify-content-center align-items-center app-color-red-1 rounded-md">
-                                                            56 Mins
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-primary btn-sm">Modificar Ruta</button>
-                                                            <button class="btn btn-danger btn-sm">Eliminar Ruta</button>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <i class="fas fa-check-circle text-blue-300"></i>
-                                                    </td>
-                                                </tr>
-                                                <tr class="app-border-1">
-                                                    <td>
-                                                        <i class="fas fa-circle text-blue-300 ml-3"></i>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center align-items-center rounded-md w-8 h-8 app-bg-yellow-2 app-color-yellow-1 text-lg font-semibold">3</div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex flex-row align-items-center py-3">
-                                                            <div class="w-10 h-10 bg-green-100 rounded-full mr-5"></div>
-                                                            <div class="d-flex flex-column">
-                                                                <span class="font-semibold text-sm app-color-black">John Wick</span>
-                                                                <span class="font-semibold text-xs app-color-gray-1">Male, 45 yr</span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">9999999999</span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="font-semibold text-sm app-color-gray-1">05:10PM</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="app-bg-blue-2 h-8 w-28 font-semibold text-sm d-flex justify-content-center align-items-center app-color-blue-1 rounded-md">
-                                                            Not Arrived
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex justify-content-center">
-                                                            <button class="btn btn-primary btn-sm">Modificar Ruta</button>
-                                                            <button class="btn btn-danger btn-sm">Eliminar Ruta</button>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <i class="fas fa-check-circle text-blue-300"></i>
-                                                    </td>
-                                                </tr>
+                                                <%
+                                                }
+                                                %>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -739,6 +714,56 @@
             </div>
         </div>
     </div>
+    <!-- ModalEditRuta -->
+    <div class="modal fade" id="modifyRoadModal" tabindex="-1" role="dialog" aria-labelledby="insertUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modificar Ruta</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="/AvanceProject-1/SV_Ruta?accion=modificarRoad" method="POST">
+                        <div class="form-outline mb-4">
+                            <input type="text" name="rutaId" id="rutaId" class="form-control" readonly>
+                            <p>Ruta:</p>
+                            <input type="text" name="nameruta" id="nameruta" class="form-control" />
+                            <p>Descripcion:</p>
+                            <input type="text" name="description" id="description" class="form-control" />
+                            <p>Distancia recorrido:</p>
+                            <input type="text" name="distancia" id="distancia" class="form-control" />
+                            <p>Tiempo recorrido:</p>
+                            <input type="text" name="time" id="time" class="form-control" />
+                            <p>Observacion:</p>
+                            <input type="text" name="review" id="review" class="form-control" />
+                            <p>Turno:</p>
+                            <select name="idTurn" id="idTurn" class="form-control">
+                                <%
+                                DAO_Ruta daorth = new DAO_Ruta();
+                                List<Horario> hora = daorth.obtenerHorarios(); 
+
+                                for (Horario horario : hora) {
+                                %>
+                                <option value="<%= horario.getIdHorario() %>"><%= horario.getTurno() %></option>
+                                <%
+                                }
+                                %>
+                            </select> <br>
+                            <p>Estado:</p>
+                            <select name="status" id="status" class="form-control">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ModalInsertChofer -->
     <div class="modal fade" id="insertUserModal" tabindex="-1" role="dialog" aria-labelledby="insertUserModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -825,6 +850,54 @@
             </div>
         </div>
     </div>
+    <!-- ModalInsertRuta -->
+    <div class="modal fade" id="insertRoadModal" tabindex="-1" role="dialog" aria-labelledby="insertUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ingresar Ruta</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="/AvanceProject-1/SV_Ruta?accion=insertRoad" method="POST">
+                        <div class="form-outline mb-4">
+                            <p>Ruta:</p>
+                            <input type="text" name="nameruta" id="nameruta" class="form-control" />
+                            <p>Descripcion:</p>
+                            <input type="text" name="description" id="description" class="form-control" />
+                            <p>Distancia recorrido:</p>
+                            <input type="text" name="distancia" id="distancia" class="form-control" />
+                            <p>Tiempo recorrido:</p>
+                            <input type="text" name="time" id="time" class="form-control" />
+                            <p>Observacion:</p>
+                            <input type="text" name="review" id="review" class="form-control" />
+                            <p>Turno:</p>
+                            <select name="idTurno" id="idTurno" class="form-control">
+                                <%
+                                DAO_Ruta daort = new DAO_Ruta();
+                                List<Horario> horarios = daort.obtenerHorarios(); 
+
+                                for (Horario horario : horarios) {
+                                %>
+                                <option value="<%= horario.getIdHorario() %>"><%= horario.getTurno() %></option>
+                                <%
+                                }
+                                %>
+                            </select> <br>
+                            <p>Estado:</p>
+                            <select name="status" id="status" class="form-control">
+                                <option value="activo">Activo</option>
+                                <option value="inactivo">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--   Core JS Files   -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -841,7 +914,6 @@
                             // Obtener los valores de los campos de entrada
                             var minForo = parseFloat(document.getElementById('minForo').value);
                             var maxForo = parseFloat(document.getElementById('maxForo').value);
-
                             // Validar que el valor del "Foro Mínimo" sea menor o igual al valor del "Foro Máximo"
                             if (minForo > maxForo) {
                                 alert('El "Foro Mínimo" debe ser menor o igual al "Foro Máximo".');
@@ -851,13 +923,12 @@
     </script>
 
     <script>
-        // Agregar un controlador de eventos cuando se muestra el modal
+// Agregar un controlador de eventos cuando se muestra el modal
         $('#insertUserModalBus').on('shown.bs.modal', function () {
             // Aquí tu script para validar el "Foro Mínimo" y "Foro Máximo"
             document.getElementById('submitBtnI').addEventListener('click', function () {
                 var minForoI = parseFloat(document.getElementById('minForoI').value);
                 var maxForoI = parseFloat(document.getElementById('maxForoI').value);
-
                 if (minForoI > maxForoI) {
                     alert('El "Foro Mínimo" debe ser menor o igual al "Foro Máximo".');
                     event.preventDefault();
@@ -886,6 +957,16 @@
                 $("#BusId").val(choferId);
             });
         });
+
+        $(document).ready(function () {
+            // Capturar el clic en el botón "Edit"
+            $(".edit-road").click(function () {
+                // Obtener el ID del chofer desde el atributo de datos personalizado
+                var choferId = $(this).data("ruta-id");
+                // Llenar el campo de entrada deshabilitado con el ID del chofer
+                $("#rutaId").val(choferId);
+            });
+        });
     </script>
     <script>
         document.getElementById("CerrarSesion").addEventListener("click", function () {
@@ -893,7 +974,6 @@
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "/AvanceProject-1/SV_Usuario?accion=cerrar", true);
             xhr.send();
-
             xhr.onload = function () {
                 if (xhr.status == 200) {
                     // Redirige a la página de inicio de sesión después de cerrar sesión
@@ -908,13 +988,12 @@
                 format: 'dd/mm/yyyy', // Formato de fecha personalizado
                 autoclose: true
             });
-
             $('#limpiarFecha').click(function () {
                 // Limpiar la fecha
                 $('#fechaEmpleado').val('');
             });
         });
-        //Restablecer Modal
+//Restablecer Modal
         $('#editUserModal').on('hidden.bs.modal', function (e) {
             $(this).find('input, select').each(function () {
                 $(this).val(null); // Establece el valor a nulo (vacío)
@@ -928,20 +1007,19 @@
                 format: 'dd/mm/yyyy', // Formato de fecha personalizado
                 autoclose: true
             });
-
             $('#limpiarFechaInsert').click(function () {
                 // Limpiar la fecha
                 $('#fechaEmpleadoInsert').val('');
             });
         });
 
-        // Restablecer Modal
+// Restablecer Modal
         $('#insertUserModal').on('hidden.bs.modal', function (e) {
             $(this).find('input, select').each(function () {
                 $(this).val(null); // Establece el valor a nulo (vacío)
             });
         });
-        // Restablecer ModalBUS
+// Restablecer ModalBUS
         $('#insertUserModalBus').on('hidden.bs.modal', function (e) {
             $(this).find('input, select').each(function () {
                 $(this).val(null); // Establece el valor a nulo (vacío)
