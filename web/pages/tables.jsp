@@ -342,6 +342,77 @@
                     <div class="col-12">
                         <div class="card mb-4">
                             <div class="card-header pb-0">
+                                <h6>Choferes No Habilitados</h6>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#insertUserModal" style="position: absolute; top: 18px; right: 18px;" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="card-body px-0 pt-0 pb-2">
+                                <div class="table-responsive p-0">
+                                    <% DAO_Chofer daoc = new DAO_Chofer();
+                                    List<Chauffeur> chauffa = daoc.ShowDataUnava();
+                                    %>
+                                    <table class="table align-items-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Chofer</th>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Phone</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Employed</th>
+                                                <th class="text-secondary opacity-7"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (Chauffeur chauffe : chauffa) { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="/AvanceProject-1/assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user">
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm"><%= chauffe.getName() + " " + chauffe.getLastname() %></h6>
+                                                            <p class="text-xs text-secondary mb-0"><%= chauffe.getNmbrLicense() %></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p class="text-xs font-weight-bold mb-0"><%= chauffe.getPhone() %></p>
+
+                                                </td>
+                                                <td class="align-middle text-center text-sm">
+                                                    <span class="text-secondary text-xs font-weight-bold <%= chauffe.getDni() %>"><%= chauffe.isCondition() ? "Activo" : "Inactivo" %></span>
+                                                    <p class="text-xs text-secondary mb-0"><%= chauffe.getReview() %></p>
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    <span class="text-secondary text-xs font-weight-bold"><%= chauffe.getDate() %></span>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="#" class="text-secondary font-weight-bold text-xs edit-chofer"
+                                                       data-chofer-id="<%= chauffe.getIdChauf() %>"
+                                                       data-toggle="modal" data-target="#editUserModal" style="margin-right: 10px">
+                                                        Edit
+                                                    </a>
+                                                    <a href="/AvanceProject-1/SV_Chofer?accion=updateStatuChau&chauId=<%= chauffe.getIdChauf() %>"
+                                                       class="text-secondary font-weight-bold text-xs">
+                                                        Unavailable
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header pb-0">
                                 <h6>Buses</h6>
                                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#insertUserModalBus" style="position: absolute; top: 18px; right: 18px;" >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">

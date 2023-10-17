@@ -71,6 +71,38 @@ public class DAO_Chofer extends Conexion {
 
         return chauffeurs;
     }
+    
+    public List<Chauffeur> ShowDataUnava() {
+        List<Chauffeur> chauffeurs = new ArrayList<>();
+
+        String requestSql = "SELECT * FROM chofer WHERE activo = 0";
+
+        try {
+            pst = cn.prepareStatement(requestSql);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Chauffeur chf = new Chauffeur();
+                chf.setIdChauf(rs.getInt("idChofer")); // Asumiendo que el campo "id" es la primera columna
+                chf.setName(rs.getString("nombreChofer"));
+                chf.setLastname(rs.getString("apellidoChofer"));
+                chf.setDni(rs.getString("DNI"));
+                chf.setPhone(rs.getString("telefonoChofer"));
+                chf.setNmbrLicense(rs.getString("nroLicencia"));
+                chf.setPhoto(rs.getString("fotoChofer"));
+                chf.setDate(rs.getString("fechContratacion"));
+                chf.setReview(rs.getString("observacionChofer"));
+                chf.setCondition(rs.getBoolean("activo"));
+
+                chauffeurs.add(chf);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error al comprobar\n" + e);
+        }
+
+        return chauffeurs;
+    }
 
     public Chauffeur UpdateDriver(Chauffeur chf) {
         String sql = "UPDATE chofer SET nombreChofer=?, apellidoChofer=?, DNI=?, telefonoChofer=?, "
