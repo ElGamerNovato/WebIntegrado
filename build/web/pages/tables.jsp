@@ -390,14 +390,9 @@
                                                     <span class="text-secondary text-xs font-weight-bold"><%= chauffe.getDate() %></span>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a href="#" class="text-secondary font-weight-bold text-xs edit-chofer"
-                                                       data-chofer-id="<%= chauffe.getIdChauf() %>"
-                                                       data-toggle="modal" data-target="#editUserModal" style="margin-right: 10px">
-                                                        Edit
-                                                    </a>
                                                     <a href="/AvanceProject-1/SV_Chofer?accion=updateStatuChau&chauId=<%= chauffe.getIdChauf() %>"
                                                        class="text-secondary font-weight-bold text-xs">
-                                                        Unavailable
+                                                        Habilitar
                                                     </a>
                                                 </td>
                                             </tr>
