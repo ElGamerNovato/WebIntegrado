@@ -404,7 +404,76 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header pb-0">
+                                <h6>Choferes No Habilitados</h6>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#insertUserModal" style="position: absolute; top: 18px; right: 18px;" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="card-body px-0 pt-0 pb-2">
+                                <div class="table-responsive p-0">
+                                    <% DAO_Pasajero pasajer = new DAO_Pasajero();
+                                    List<Pasajero> pasa = pasajer.MostrarDatos();
+                                    %>
+                                    <table class="table align-items-center mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cliente</th>
+                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">AM</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Celular</th>
+                                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Dirección</th>
+                                                <th class="text-secondary opacity-7"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for (Pasajero pas : pasa) { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="/AvanceProject-1/assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user">
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm"><%= pas.getNom() + " " + pas.getAp() %></h6>
+                                                            <p class="text-xs text-secondary mb-0"><%= pas.getDNI() %></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p class="text-xs font-weight-bold mb-0"><%= pas.getAm() %></p>
+
+                                                </td>
+                                                <td>
+                                                    <p class="text-secondary text-xs font-weight-bold <%= pas.getCelular() %>"></p>
+                                                </td>
+                                                <td>
+                                                    <p class="text-secondary text-xs font-weight-bold"><%= pas.getDireccion() %></p>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <a href="#" class="text-secondary font-weight-bold text-xs edit-chofer"
+                                                       data-pasaj-id="<%= pas.getIdPasajero() %>"
+                                                       data-toggle="modal" data-target="#editUserModal" style="margin-right: 10px">
+                                                        Editar
+                                                    </a>
+                                                    <a href="/AvanceProject-1/SV_Chofer?accion=EliminarPasaj&idPasajero=<%= pas.getIdPasajero() %>"
+                                                       class="text-secondary font-weight-bold text-xs">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card mb-4">

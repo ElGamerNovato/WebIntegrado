@@ -60,4 +60,37 @@ public class DAO_Pasajero extends Conexion{
         }
         return pasajero;
     }
+    public Pasajero ActualizarPasajero(Pasajero pasajer) {
+        String sql = "update pasajero set nom=?, ap=?, am=?, dni=?, "
+                + "celular=?, direccion=? where idPasajero=?";
+
+        try {
+            pst = cn.prepareStatement(sql);
+            pst.setString(1, pasajer.getNom());
+            pst.setString(2, pasajer.getAp());
+            pst.setString(3, pasajer.getAm());
+            pst.setString(4, pasajer.getDNI());
+            pst.setString(5, pasajer.getCelular());
+            pst.setString(6, pasajer.getDireccion());
+            pst.setInt(9, pasajer.getIdPasajero()); // Utiliza el ID para identificar el conductor a actualizar
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar el conductor: " + e);
+        }
+
+        return pasajer;
+    }
+    
+    public boolean EliminarPasajero(int idPasajero){
+        String sql = "delete from pasajero where idPasajero=?";
+        try{
+            pst=cn.prepareStatement(sql);
+            pst.setInt(1, idPasajero);
+            int rowsUpdated = pst.executeUpdate();
+            return rowsUpdated>0;
+        }catch (SQLException e){
+            System.out.println("Error al eliminar el pasajero: "+e);
+            return false;
+        }
+    }
 }

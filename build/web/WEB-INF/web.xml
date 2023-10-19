@@ -4,6 +4,10 @@
         <servlet-name>SV_User</servlet-name>
         <servlet-class>Controlador.SV_User</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SV_Pasajero</servlet-name>
+        <servlet-class>Controlador.SV_Pasajero</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>SV_User</servlet-name>
         <url-pattern>/SV_User</url-pattern>
@@ -16,15 +20,19 @@
         <servlet-name>SV_Chofer</servlet-name>
         <url-pattern>/SV_Chofer</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SV_Pasajero</servlet-name>
+        <url-pattern>/SV_Pasajero</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>Controlador.AuthenticationFilter</filter-class> <!-- Asegúrate de ajustar la ruta de la clase del filtro -->
+        <filter-class>Controlador.AuthenticationFilter</filter-class>
+        <!-- Asegúrate de ajustar la ruta de la clase del filtro -->
     </filter>
     <!-- Mapea el filtro a todas las URL -->
     <filter-mapping>
