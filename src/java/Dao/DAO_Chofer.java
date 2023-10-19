@@ -1,7 +1,6 @@
 package Dao;
 
 import Modelo.Chauffeur;
-import Modelo.User;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
