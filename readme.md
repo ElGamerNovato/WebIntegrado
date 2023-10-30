@@ -1,1 +1,1 @@
-Este es el readme
+El proyecto pasará a usar JSFL
